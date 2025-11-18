@@ -99,6 +99,10 @@ class Player extends Form{
         this.height = height;
     }
     update(){
+
+        //Ändrar hastighetet på värdet av this.velocity_x = -3; för att gå snabare åt vänster och plus för att gå åt höger
+        //Samma gäller velocity_Y med upp o ner där är -3 och upp blir 3 
+
          if (Keyboard.isDown('A')) {
             this.velocity_x = -3;
         }
