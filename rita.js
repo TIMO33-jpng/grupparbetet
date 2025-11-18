@@ -131,7 +131,7 @@ class Player extends Form{
     }
 }
 //Här ska alla objekt som ska målas vara
-new Player(300,300,20,20,0,0,"red")
+new Player(215,215,20,20,0,0,"red")
 
 function gameloop() {
     ctx.clearRect(0,0, canvas.width, canvas.height);
