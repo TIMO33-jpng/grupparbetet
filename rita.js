@@ -2,6 +2,37 @@ const canvas = document.querySelector("#minCanvas");
 const ctx = canvas.getContext("2d");
 const objlist = [];
 
+
+//kollar efter tangettryck
+class Keyboard {
+    static validKeys = ['W','A','D','S'];
+    static keystates = {};
+
+    static addListeners() {                
+        document.addEventListener('keydown', function(e) {
+            let ks = e.key.toUpperCase();
+            if (Keyboard.validKeys.includes(ks))
+                Keyboard.keystates[ks] = true;
+        });
+
+        document.addEventListener('keyup', function(e) {
+            let ks = e.key.toUpperCase();
+            if (Keyboard.validKeys.includes(ks))
+                Keyboard.keystates[ks] = false;
+        });
+        
+    }
+
+    static isDown(key) {
+        //!! converts into a strict boolean (true or false)
+        return !!Keyboard.keystates[key.toUpperCase()];
+    }
+
+}
+
+Keyboard.addListeners();
+
+//Generel form class typ
 class Form{
     constructor(x,y,velocity_x,velocity_y,color){
         this.x = x;
@@ -68,6 +99,25 @@ class Player extends Form{
         this.height = height;
     }
     update(){
+         if (Keyboard.isDown('A')) {
+            this.velocity_x = -3;
+        }
+        else if (Keyboard.isDown('D')) {
+            this.velocity_x = 3;
+        }        
+        else {
+            this.velocity_x = 0;
+        }
+        if (Keyboard.isDown('W')){
+            this.velocity_y = -3;    
+        }
+        else if (Keyboard.isDown('S')) {
+            this.velocity_y = 3;
+        }
+        else {
+            this.velocity_y = 0;
+        }
+
         super.update();
     }
     draw(){
