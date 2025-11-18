@@ -67,7 +67,18 @@ class Player extends Form{
         this.width = width;
         this.height = height;
     }
+    update(){
+        super.update();
+    }
+    draw(){
+        if(!this.isActive) return;
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x,this.y,this.width,this.height)
+    }
 }
+//Här ska alla objekt som ska målas vara
+new Player(300,300,20,20,0,0,"red")
+
 function gameloop() {
     ctx.clearRect(0,0, canvas.width, canvas.height);
     
@@ -75,9 +86,9 @@ function gameloop() {
     //Måste vara objlist.push(this) i varje class för att lägga in dom en objlist
     objlist.forEach(e=> e.update());
     //Kollar Kollisionen
-    for (let i = 0; i < objList.length; i++) {
-        for (let j = i + 1; j < objList.length; j++) {
-            objList[i].detect_collision(objList[j]);
+    for (let i = 0; i < objlist.length; i++) {
+        for (let j = i + 1; j < objlist.length; j++) {
+            objlist[i].detect_collision(objlist[j]);
         }
     }
     // ritar ut alla objekt som är i objlist arrayen
