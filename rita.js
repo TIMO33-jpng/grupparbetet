@@ -61,6 +61,7 @@ class Form{
         let from_up = (t.y + t.height >= e.y);
 
         if (from_left && from_right && from_up && from_down) {
+                //Ska bara vara För player egentligen
                 this.isActive = false;
             }
             
@@ -71,6 +72,7 @@ class Player extends Form{
         super(x,y,velocity_x,velocity_y,color)
         this.width = width;
         this.height = height;
+        this.isActive = true;
     }
     update(){
 
@@ -95,7 +97,6 @@ class Player extends Form{
         else {
             this.velocity_y = 0;
         }
-
         super.update();
     }
     draw(){
@@ -129,6 +130,8 @@ class rotten extends Form{
 new Player(215,215,20,20,0,0,"red")
 new rotten(180,180,10,10,1,0,"purple")
 new rotten(100, 50, 20, 20, 1, 1,"yellow")
+new rotten(50, 25, 20, 20, -10, 10,"green")
+new rotten(50, 25, 20, 20, 10, -12,"blue")
 
 function gameloop() {
     ctx.clearRect(0,0, canvas.width, canvas.height);
@@ -138,10 +141,9 @@ function gameloop() {
     objlist.forEach(e=> e.update());
     //Kollar Kollisionen
     for (let i = 0; i < objlist.length; i++) {
-        for (let j = i + 1; j < objlist.length; j++) {
-            objlist[i].detect_collision(objlist[j]);
+            objlist[i].detect_collision(objlist);
         }
-    }
+
     // ritar ut alla objekt som är i objlist arrayen
     objlist.forEach(e => e.draw());
     requestAnimationFrame(gameloop);
