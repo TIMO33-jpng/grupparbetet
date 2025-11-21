@@ -61,37 +61,11 @@ class Form{
         let from_up = (t.y + t.height >= e.y);
 
         if (from_left && from_right && from_up && from_down) {
-            
-            let overLapX = Math.min(t.x + t.width - e.x, e.x + e.width - t.x);
-            let overLapY = Math.min(t.y + t.height - e.y, e.y + e.height - t.y);
-
-            if (overLapX < overLapY) {
-                t.velocity_x *= -1;
-                e.velocity_x *= -1;
-
-                if (t.x < e.x) {
-                    t.x -= overLapX / 2;
-                    e.x += overLapX / 2;
-                } else {
-                    t.x += overLapX / 2;
-                    e.x -= overLapX / 2;
-                }
-            } else {
-                t.velocity_y *= -1;
-                e.velocity_y *= -1;
-
-                if (t.y < e.y) {
-                    t.y -= overLapY / 2;
-                    e.y += overLapY / 2;
-                } else {
-                    t.y += overLapY / 2;
-                    e.y -= overLapY / 2;
-                }
+                this.isActive = false;
             }
             
         }
     }
-}
 class Player extends Form{
     constructor(x,y,width,height,velocity_x,velocity_y,color){
         super(x,y,velocity_x,velocity_y,color)
@@ -130,8 +104,31 @@ class Player extends Form{
         ctx.fillRect(this.x,this.y,this.width,this.height)
     }
 }
+class rotten extends Form{
+    constructor(x,y,width,height,velocity_x,velocity_y,color){
+        super(x,y,velocity_x,velocity_y,color)
+        this.width = width;
+        this.height = height;
+    }
+    update(){
+        super.update()
+        if(this.x<=0||this.x + this.width>= canvas.width){
+            this.velocity_x*=-1;
+        }
+    if(this.y<=0||this.y + this.height>= canvas.height){
+            this.velocity_y*=-1;
+        }
+    }
+    draw(){
+        if(!this.isActive) return;
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x,this.y,this.width,this.height)
+    }
+}
 //Här ska alla objekt som ska målas vara
 new Player(215,215,20,20,0,0,"red")
+new rotten(180,180,10,10,1,0,"purple")
+new rotten(100, 50, 20, 20, 1, 1,"yellow")
 
 function gameloop() {
     ctx.clearRect(0,0, canvas.width, canvas.height);
