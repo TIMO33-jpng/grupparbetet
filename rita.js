@@ -15,12 +15,12 @@ document.addEventListener('click', function (e) {
 document.addEventListener('click', function (e) {
     if (e.target.id === 'Resetbutton') {
         alert("Everything Reseted")
-            objlist.forEach(obj => {
-                obj.resetposition();
-                obj.isActive = false;
-            });
+        objlist.forEach(obj => {
+            obj.resetposition();
+            obj.isActive = false;
+        });
 
-            player.isActive = true;
+        player.isActive = true;
     }
 })
 
@@ -102,12 +102,14 @@ class Player extends Form {
         super(x, y, velocity_x, velocity_y, color)
         this.width = width;
         this.height = height;
+        this.score = 0;
         this.isActive = true;
     }
     update() {
-
         //Ändrar hastighetet på värdet av this.velocity_x = -3; för att gå snabare åt vänster och plus för att gå åt höger
         //Samma gäller velocity_Y med upp o ner där är -3 och upp blir 3 
+
+        
 
         if (Keyboard.isDown('A')) {
             this.velocity_x = -3;
@@ -139,10 +141,42 @@ class Player extends Form {
         let from_up = (t.y + t.height >= e.y);
 
         if (from_left && from_right && from_up && from_down) {
-            //Ska bara vara För player egentligen
-            this.isActive = false;
-        }
+            if (e instanceof rotten) {
+                //Ska bara vara För player egentligen
+                this.isActive = false;
+            }
+            if (e instanceof good) {
+                if (e.isActive) {
+                    e.isActive = false;
+                    this.score += e.points
+                    document.querySelector('#score').innerHTML = this.score;
+                }
 
+            }
+        }
+    }
+    draw() {
+        if (!this.isActive) return;
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x, this.y, this.width, this.height)
+    }
+}
+class good extends Form {
+    constructor(x, y, width, height, velocity_x, velocity_y, color, points) {
+        super(x, y, velocity_x, velocity_y, color)
+        this.width = width;
+        this.height = height;
+        this.points = points;
+        this.isActive = false;
+    }
+    update() {
+        super.update()
+        if (this.x <= 0 || this.x + this.width >= canvas.width) {
+            this.velocity_x *= -1;
+        }
+        if (this.y <= 0 || this.y + this.height >= canvas.height) {
+            this.velocity_y *= -1;
+        }
     }
     draw() {
         if (!this.isActive) return;
@@ -173,11 +207,18 @@ class rotten extends Form {
     }
 }
 //Här ska alla objekt som ska målas vara
+
+//Spelaren
 const player = new Player(215, 215, 20, 20, 0, 0, "red")
+
+//Bra frukter
+new good(215, 100, 20, 20, 1, 1, "yellow", 67)
+
+//Fiender
 new rotten(180, 180, 10, 10, 1, 0, "purple")
-new rotten(100, 50, 20, 20, 1, 1, "yellow")
-new rotten(50, 25, 20, 20, -3, 4, "green")
-new rotten(50, 25, 20, 20, 4, -2, "blue")
+new rotten(100, 50, 20, 20, 1, 1, "purple")
+new rotten(50, 25, 20, 20, -3, 4, "purple")
+new rotten(50, 25, 20, 20, 4, -2, "purple")
 
 function gameloop() {
     if (!this.isActive) {
