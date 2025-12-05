@@ -19,8 +19,11 @@ document.addEventListener('click', function (e) {
             obj.resetposition();
             obj.isActive = false;
         });
-
         player.isActive = true;
+        player.score = 0;
+        document.querySelector('#score').innerHTML = player.score;
+        this.storedscore = 0;
+        document.querySelector('#stored-score').innerHTML = this.storedscore;
     }
 })
 
@@ -80,22 +83,6 @@ class Form {
         this.y = this.startY;
     }
     detect_collision() { }
-    /* detect_collision(e) {
-          let t = this;
-          if (!e.isActive) return;
-  
-          let from_left = (t.x + t.width >= e.x);
-          let from_right = (t.x <= e.x + e.width);
-          let from_down = (t.y <= e.y + e.height);
-          let from_up = (t.y + t.height >= e.y);
-  
-          if (from_left && from_right && from_up && from_down) {
-                  //Ska bara vara För player egentligen
-                  this.isActive = false;
-              }
-              
-          }
-          */
 }
 class Player extends Form {
     constructor(x, y, width, height, velocity_x, velocity_y, color) {
@@ -110,7 +97,19 @@ class Player extends Form {
         //Ändrar hastighetet på värdet av this.velocity_x = -3; för att gå snabare åt vänster och plus för att gå åt höger
         //Samma gäller velocity_Y med upp o ner där är -3 och upp blir 3 
 
-
+        //kollision med väggar
+        if (this.x <= 0) {
+            this.x = 0;
+        }
+        if (this.x + this.width >= canvas.width) {
+            this.x = canvas.width - this.width;
+        }
+        if (this.y <= 0) {
+            this.y = 0;
+        }
+        if (this.y + this.height >= canvas.height) {
+            this.y = canvas.height - this.height;
+        }
 
         if (Keyboard.isDown('A')) {
             this.velocity_x = -3;
@@ -143,7 +142,10 @@ class Player extends Form {
 
         if (from_left && from_right && from_up && from_down) {
             if (e instanceof rotten) {
-                //Ska bara vara För player egentligen
+                this.score = 0;
+                document.querySelector('#score').innerHTML = this.score;
+                this.storedscore = 0;
+                document.querySelector('#stored-score').innerHTML = this.storedscore;
                 this.isActive = false;
             }
             if (e instanceof good) {
@@ -230,12 +232,14 @@ class station extends Form {
 //Stationen
 new station(0, 0, 50, 50, "blue")
 //Spelaren
-const player = new Player(215, 215, 20, 20, 0, 0, "red")
+const player = new Player(12.5, 12.5, 25, 25, 0, 0, "red")
 //Bra frukter
-new good(215, 100, 20, 20, 1, 1, "yellow", 50)
-new good(100, 100, 20, 20, 1, 2, "yellow", 50)
+new good(215, 100, 20, 20, 0, 0, "yellow", 50)
+new good(100, 100, 20, 20, 0, 0, "yellow", 50)
 //Fiender
-new rotten(180, 180, 10, 10, 1, 0, "purple")
+new rotten(180, 180, 10, 10, 1, 1, "purple")
+new rotten(320, 0, 10, 10, 2, 1, "purple")
+new rotten(30, 300, 10, 10, 1, 2, "purple")
 
 function gameloop() {
     if (!this.isActive) {
@@ -253,6 +257,7 @@ function gameloop() {
         objlist.forEach(e => e.draw());
 
     }
+
     if (!player.isActive) {
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
