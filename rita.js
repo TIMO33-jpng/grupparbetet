@@ -257,11 +257,12 @@ function gameloop() {
         objlist.forEach(e => e.draw());
 
     }
-
+    // game over
     if (!player.isActive) {
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
+    // game won
     if (player.score >= 100) {
         ctx.fillStyle = "green";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
