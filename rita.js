@@ -2,6 +2,8 @@ const canvas = document.querySelector("#minCanvas");
 const ctx = canvas.getContext("2d");
 const objlist = [];
 
+const image = document.getElementById("GameOver");
+
 document.addEventListener('click', function (e) {
     if (e.target.id === 'Startbutton') {
         setTimeout(() => {
@@ -259,8 +261,9 @@ function gameloop() {
     }
     // game over
     if (!player.isActive) {
-        ctx.fillStyle = "black";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        //ctx.fillStyle = "black";
+      //  ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(image,0,0);
     }
     // game won
     if (player.score >= 100) {
