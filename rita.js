@@ -103,13 +103,14 @@ class Player extends Form {
         this.width = width;
         this.height = height;
         this.score = 0;
+        this.storedscore = 0;
         this.isActive = true;
     }
     update() {
         //Ändrar hastighetet på värdet av this.velocity_x = -3; för att gå snabare åt vänster och plus för att gå åt höger
         //Samma gäller velocity_Y med upp o ner där är -3 och upp blir 3 
 
-        
+
 
         if (Keyboard.isDown('A')) {
             this.velocity_x = -3;
@@ -148,10 +149,15 @@ class Player extends Form {
             if (e instanceof good) {
                 if (e.isActive) {
                     e.isActive = false;
-                    this.score += e.points
-                    document.querySelector('#score').innerHTML = this.score;
+                    this.storedscore += e.points
+                    document.querySelector('#stored-score').innerHTML = this.storedscore;
                 }
-
+            }
+            if (e instanceof station) {
+                this.score += this.storedscore;
+                document.querySelector('#score').innerHTML = this.score;
+                this.storedscore = 0;
+                document.querySelector('#stored-score').innerHTML = this.storedscore;
             }
         }
     }
@@ -206,19 +212,30 @@ class rotten extends Form {
         ctx.fillRect(this.x, this.y, this.width, this.height)
     }
 }
+class station extends Form {
+    constructor(x, y, width, height, color) {
+        super(x, y, 0, 0, color)
+        this.width = width;
+        this.height = height;
+    }
+    draw() {
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x, this.y, this.width, this.height)
+    }
+}
+
+
 //Här ska alla objekt som ska målas vara
 
+//Stationen
+new station(0, 0, 50, 50, "blue")
 //Spelaren
 const player = new Player(215, 215, 20, 20, 0, 0, "red")
-
 //Bra frukter
-new good(215, 100, 20, 20, 1, 1, "yellow", 67)
-
+new good(215, 100, 20, 20, 1, 1, "yellow", 50)
+new good(100, 100, 20, 20, 1, 2, "yellow", 50)
 //Fiender
 new rotten(180, 180, 10, 10, 1, 0, "purple")
-new rotten(100, 50, 20, 20, 1, 1, "purple")
-new rotten(50, 25, 20, 20, -3, 4, "purple")
-new rotten(50, 25, 20, 20, 4, -2, "purple")
 
 function gameloop() {
     if (!this.isActive) {
@@ -240,6 +257,11 @@ function gameloop() {
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
+    if (player.score >= 100) {
+        ctx.fillStyle = "green";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
 
     requestAnimationFrame(gameloop);
 };
