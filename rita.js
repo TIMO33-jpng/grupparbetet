@@ -203,10 +203,10 @@ class rotten extends Form {
     }
     update() {
         super.update()
-        if (this.x <= 0 || this.x + this.width >= canvas.width) {
+        if (this.x <= 0 || this.x + this.width >= canvas.width || this.x <= 50) {
             this.velocity_x *= -1;
         }
-        if (this.y <= 0 || this.y + this.height >= canvas.height) {
+        if (this.y <= 0 || this.y + this.height >= canvas.height || this.y <= 50) {
             this.velocity_y *= -1;
         }
     }
